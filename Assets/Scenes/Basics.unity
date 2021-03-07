@@ -714,6 +714,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velTxt: {fileID: 532759203}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
   jumpForce: 14
   waitBeforeJump: 0
   delayBeforeJump: 1
@@ -858,7 +861,7 @@ GameObject:
   - component: {fileID: 1739430242}
   - component: {fileID: 1739430241}
   - component: {fileID: 1739430240}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Obstacle 1
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -967,7 +970,7 @@ GameObject:
   - component: {fileID: 1890554220}
   - component: {fileID: 1890554219}
   - component: {fileID: 1890554222}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground
   m_TagString: Ground
   m_Icon: {fileID: 0}
