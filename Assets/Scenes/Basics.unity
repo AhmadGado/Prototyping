@@ -728,7 +728,7 @@ MonoBehaviour:
   slowFallingFactor: 0.5
   dragResistanceValue: 2
   jumpBreakingMultiplier: 100
-  extraJumps: 1
+  extraJumps: 0
   maxExtraJumps: 2
   jumpCounter: 0
   allowedFallingVelToMultipleJump: -2
@@ -860,7 +860,7 @@ GameObject:
   - component: {fileID: 1739430240}
   m_Layer: 0
   m_Name: Obstacle 1
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
