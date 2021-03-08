@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 //TODO: Stop At Peak
 //TODO: SphereCast for checking if is ground
-//TODO: 
+//TODO: Break jump on high surfaces.. add current position
 public class JumpSystem : MonoBehaviour
 {
     Rigidbody rb;
@@ -34,6 +34,8 @@ public class JumpSystem : MonoBehaviour
     [SerializeField] float extraJumpHeight;
     [SerializeField] bool landing;
     RaycastHit hit;
+    [SerializeField] float rayLength;
+    [SerializeField] float rayCenterOffset;
     // Start is called before the first frame update
     void Start()
     {
@@ -76,11 +78,18 @@ public class JumpSystem : MonoBehaviour
     }
 
     void CheckIsGrounded()
-    { 
-        Debug.DrawRay(transform.position+ Vector3.down * 0.4f, Vector3.down*0.25f,Color.red);
+    {
+        //Debug.DrawRay(transform.position+ Vector3.down * 0.4f, Vector3.down*0.25f,Color.red);
         //Physics.SphereCast(transform.position + Vector3.down * 0.4f, 2f, Vector3.down, out hit, 0.25f, groundLayer);
-        isGrounded = Physics.Raycast(transform.position + Vector3.down * 0.4f, Vector3.down, 0.25f, groundLayer);
-        //isGrounded = Physics.SphereCast(transform.position + Vector3.down * 0.4f, 2f, Vector3.down, out hit, 2f, groundLayer);
+        //isGrounded = Physics.Raycast(transform.position + Vector3.down * 0.4f, Vector3.down, 0.25f, groundLayer)  ;
+        //isGrounded = Physics.SphereCast(transform.position + Vector3.down*0.4f, 0.5f, Vector3.down, out hit, 2f, groundLayer);
+        //isGrounded = Physics.BoxCast(transform.position +(transform.up * -1f), Vector3.one, transform.up * -1, out hit, transform.rotation, 0.5f);
+        isGrounded = Physics.BoxCast(transform.position+Vector3.up* rayCenterOffset,new Vector3(0.5f, 0.19f, 0.5f), transform.up * -1f, out hit, transform.rotation, rayLength);
+
+        if(hit.collider != null)
+        {
+            Debug.Log(hit.collider.name);
+        }
         if (isGrounded)
             landing = false; 
      }
@@ -166,4 +175,41 @@ public class JumpSystem : MonoBehaviour
         }
     }
 
+
+    //private void OnDrawGizmos()
+    //{
+    //    if (hit.collider != null && hit.collider.CompareTag("Ground")) 
+    //        Gizmos.color = Color.red;
+    //    else         
+    //        Gizmos.color = Color.green;
+    //    //Gizmos.DrawWireCube(transform.position + Vector3.up * (rayCenterOffset+(transform.localScale.y)), new Vector3(1f, 1f, 1f));
+    //    Gizmos.DrawRay(transform.position + Vector3.up * rayCenterOffset, transform.up * -(rayLength+0.5f));
+        
+    // }
+
+    //void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+
+    //    //Check if there has been a hit yet
+    //    if (hit.collider != null && hit.collider.CompareTag("Ground"))
+    //    {
+    //        //Draw a Ray forward from GameObject toward the hit
+    //        Gizmos.DrawRay(transform.position, transform.up*-1 * hit.distance);
+    //        //Draw a cube that extends to where the hit exists
+    //        Gizmos.DrawWireCube(transform.position + transform.up*-1 * hit.distance, transform.localScale);
+    //    }
+    //    ////If there hasn't been a hit yet, draw the ray at the maximum distance
+    //    else
+    //    {
+    //        Gizmos.color = Color.green;
+
+    //        //Draw a Ray forward from GameObject toward the maximum distance
+    //        //    if() 
+    //        Gizmos.DrawRay(transform.position, transform.up * - 1);
+    //        //Draw a cube at the maximum distance
+    //        Gizmos.DrawWireCube(transform.position + transform.up * -1f, transform.localScale);
+    //    }
+    //}
 }
+ 

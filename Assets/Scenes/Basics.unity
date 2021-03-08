@@ -738,6 +738,8 @@ MonoBehaviour:
   multipleJumpMultiplier: 0.3
   extraJumpHeight: 2
   landing: 0
+  rayLength: 0.05
+  rayCenterOffset: -0.3
 --- !u!1 &1721393021
 GameObject:
   m_ObjectHideFlags: 0
