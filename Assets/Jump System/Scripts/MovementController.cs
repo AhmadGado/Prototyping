@@ -5,6 +5,7 @@ using UnityEngine;
 public class MovementController : MonoBehaviour
 {
     Rigidbody rb;
+    [SerializeField] LayerMask obstacleLayer; 
     [SerializeField] float speed;
     [SerializeField] float rotFactor;
 
@@ -35,6 +36,11 @@ public class MovementController : MonoBehaviour
 
     void MovementByPhysics()
     {
+        Debug.DrawRay(transform.position + Vector3.up * 0.5f, transform.forward);
+        if (Physics.Raycast(transform.position+Vector3.up*0.5f, transform.forward, 1f, obstacleLayer))
+        {
+            Debug.Log("yes");
+        }
         rb.velocity = ((((transform.right * movementVector.x) + (transform.forward * movementVector.z)) * speed * Time.fixedDeltaTime) + Vector3.up * rb.velocity.y);
     }
     void RotateByAngularVelocit()

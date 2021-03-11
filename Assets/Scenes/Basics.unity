@@ -670,6 +670,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28d794cbe69b3f4d96c63b6050a5dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 256
   speed: 280
   rotFactor: 5
 --- !u!65 &1156355105
@@ -717,21 +720,22 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 256
-  jumpForce: 14
+  jump:
+    jumpForce: 14
+    jumpHeight: 1.5
+    maxFallingVelocity: -10
+    slowFallingFactor: 0.5
   waitBeforeJump: 0
   delayBeforeJump: 1
   jumpBreaking: 1
-  jumpHeight: 1.5
   jumpHeightBreakThreeshold: 0.8
   stopAtPeak: 0
   isGrounded: 0
   gravity: -15
   fallingFactor: 2
-  maxFallingVelocity: -10
-  slowFallingFactor: 0.5
   dragResistanceValue: 2
   jumpBreakingMultiplier: 100
-  extraJumps: 0
+  extraJumps: 1
   maxExtraJumps: 2
   jumpCounter: 0
   allowedFallingVelToMultipleJump: -2

@@ -10,18 +10,15 @@ public class JumpSystem : MonoBehaviour
     Rigidbody rb;
     [SerializeField] TMPro.TextMeshProUGUI velTxt;
     [SerializeField] LayerMask groundLayer;
-    [SerializeField] float jumpForce;
+    [SerializeField] Jump jump;
     [SerializeField] bool waitBeforeJump;
     [SerializeField] float delayBeforeJump;
     [SerializeField] bool jumpBreaking;
-    [SerializeField] float jumpHeight;
     [SerializeField] [Range(0f, 1f)] float jumpHeightBreakThreeshold;
     [SerializeField] bool stopAtPeak;
     [SerializeField] bool isGrounded = true;
     [SerializeField] float gravity;
     [SerializeField] float fallingFactor;
-    [SerializeField] float maxFallingVelocity;
-    [SerializeField] float slowFallingFactor;
     [SerializeField] float dragResistanceValue;
     [SerializeField] float jumpBreakingMultiplier;
     //float landingVelocity;
@@ -100,7 +97,7 @@ public class JumpSystem : MonoBehaviour
         {
             if (!stopAtPeak && jumpBreaking)
                 BreakJump();
-            if (rb.velocity.y > maxFallingVelocity) //momkn tb2a tdrbha f l fallingVelocity  //to add more force
+            if (rb.velocity.y > jump.MaxFallingVelocity) //momkn tb2a tdrbha f l fallingVelocity  //to add more force
             {
                 ApplyGravity(fallingFactor);
                 if (rb.velocity.y < 0)//so u can fall slower only on landing
@@ -122,32 +119,29 @@ public class JumpSystem : MonoBehaviour
     }
     void StopAtPeak()
     {
-        if (rb.velocity.y > 0 && transform.position.y >= (jumpHeight - 0.1f)) //- 0.1f to ensure it doesn't exceed the limit with big value
+        if (rb.velocity.y > 0 && transform.position.y >= (jump.JumpHeight - 0.1f)) //- 0.1f to ensure it doesn't exceed the limit with big value
         {        
             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         }
     }
     float GetCurrentTotalJumpHeight()//not genral height but instatneus height 
     {  
-        return jumpHeight + (extraJumps ? (extraJumpHeight * (jumpCounter - 1f)) : 0); //badl l line elly fo2//u can make it based on array or collecions
+        return jump.JumpHeight + (extraJumps ? (extraJumpHeight * (jumpCounter - 1f)) : 0); //badl l line elly fo2//u can make it based on array or collecions
     }
     void Jump()
     {
         jumpCounter++;
-        rb.velocity += Vector3.up * jumpForce;
+        rb.velocity += Vector3.up * jump.JumpForce;
     }
     void DoubleJump()
     {
-        rb.velocity += Vector3.up * jumpForce * multipleJumpMultiplier;
+        rb.velocity += Vector3.up * jump.JumpForce * multipleJumpMultiplier;
     }
     void MultipleJump(int jumpNo)
     {
         jumpCounter++;
-        //rb.velocity += Vector3.up * jumpForce * multipleJumpMultiplier;
-         rb.AddForce((Vector3.up * jumpForce * multipleJumpMultiplier), ForceMode.VelocityChange);
-        //Debug.Log(String.Format("{0:0.##}", transform.position.y));
-
-    }
+          rb.AddForce((Vector3.up * jump.JumpForce * multipleJumpMultiplier), ForceMode.VelocityChange);
+     }
 
     void ApplyGravity(float factor = 1)
     {
@@ -162,10 +156,8 @@ public class JumpSystem : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            //isGrounded = true;
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z); //to avoid euler number problem //but notice that you shouldn't modify the velocity directly when applying gravity, as this can result in unrealistic behaviour -
-            //landing = false;
-            jumpCounter = 0;
+             rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z); //to avoid euler number problem //but notice that you shouldn't modify the velocity directly when applying gravity, as this can result in unrealistic behaviour -
+             jumpCounter = 0;
         }
     }
     private void OnCollisionExit(Collision collision)
@@ -175,7 +167,7 @@ public class JumpSystem : MonoBehaviour
             isGrounded = false;
         }
     }
-
+    
 
     //private void OnDrawGizmos()
     //{
@@ -185,7 +177,7 @@ public class JumpSystem : MonoBehaviour
     //        Gizmos.color = Color.green;
     //    //Gizmos.DrawWireCube(transform.position + Vector3.up * (rayCenterOffset+(transform.localScale.y)), new Vector3(1f, 1f, 1f));
     //    Gizmos.DrawRay(transform.position + Vector3.up * rayCenterOffset, transform.up * -(rayLength+0.5f));
-        
+
     // }
 
     //void OnDrawGizmos()
@@ -213,4 +205,24 @@ public class JumpSystem : MonoBehaviour
     //    }
     //}
 }
+
+
+[System.Serializable]
+public class Jump
+{
+   [SerializeField] float jumpForce;   
+   [SerializeField] float jumpHeight;   
+   [SerializeField] float maxFallingVelocity;
+   [SerializeField] float slowFallingFactor;
+
+    public float JumpForce { get => jumpForce; set => jumpForce = value; }
+    public float JumpHeight { get => jumpHeight; set => jumpHeight = value; }
+    public float MaxFallingVelocity { get => maxFallingVelocity; set => maxFallingVelocity = value; }
+    public float SlowFallingFactor { get => slowFallingFactor; set => slowFallingFactor = value; }
+}
+[System.Serializable]
+public class ExtraJump : Jump
+{ 
+    [Range(0f, 0.5f)] float multipleJumpMultiplier;
+};
  
