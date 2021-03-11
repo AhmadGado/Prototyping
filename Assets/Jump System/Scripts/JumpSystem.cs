@@ -30,7 +30,7 @@ public class JumpSystem : MonoBehaviour
     [SerializeField] int maxExtraJumps;
     [SerializeField] int jumpCounter;
     [SerializeField] float allowedFallingVelToMultipleJump;
-    [SerializeField] float multipleJumpMultiplier;
+    [SerializeField][Range(0f,0.5f)] float multipleJumpMultiplier;
     [SerializeField] float extraJumpHeight;
     [SerializeField] bool landing;
     RaycastHit hit;
@@ -56,7 +56,7 @@ public class JumpSystem : MonoBehaviour
                     Invoke(nameof(Jump), delayBeforeJump);//delay only works with first jump
                 }
 
-            else if (extraJumps && jumpCounter <= maxExtraJumps && !(rb.velocity.y < allowedFallingVelToMultipleJump * maxExtraJumps)){
+            else if (extraJumps && jumpCounter <= maxExtraJumps && !(rb.velocity.y < allowedFallingVelToMultipleJump)){
                 //better to use breaking with multiple jump for limiting the sec jump whenever it starts
                 MultipleJump(jumpCounter);
             }
@@ -143,7 +143,8 @@ public class JumpSystem : MonoBehaviour
     void MultipleJump(int jumpNo)
     {
         jumpCounter++;
-        rb.velocity += Vector3.up * jumpForce * multipleJumpMultiplier;
+        //rb.velocity += Vector3.up * jumpForce * multipleJumpMultiplier;
+         rb.AddForce((Vector3.up * jumpForce * multipleJumpMultiplier), ForceMode.VelocityChange);
         //Debug.Log(String.Format("{0:0.##}", transform.position.y));
 
     }
