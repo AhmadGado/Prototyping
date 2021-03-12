@@ -72,6 +72,16 @@ public class JumpSystem : MonoBehaviour
     {
         CheckIsGrounded();
         Land();
+
+        if (!isGrounded)
+        {
+            if (Physics.Raycast(transform.position + Vector3.down * 0.48f,transform.forward,1f,groundLayer))
+            {
+                Debug.Log("yes");
+
+
+            }
+        }
     }
 
     void CheckIsGrounded()
@@ -95,6 +105,7 @@ public class JumpSystem : MonoBehaviour
     {
         if (!isGrounded)
         {
+
             if (!stopAtPeak && jumpBreaking)
                 BreakJump();
             if (rb.velocity.y > jump.MaxFallingVelocity) //momkn tb2a tdrbha f l fallingVelocity  //to add more force
@@ -145,12 +156,13 @@ public class JumpSystem : MonoBehaviour
 
     void ApplyGravity(float factor = 1)
     {
+
         rb.AddForce(Vector3.up * gravity * factor, ForceMode.Acceleration);
     }
 
     void DragResistance(float dragFactor = 1)
     {
-        rb.AddForce(((Vector3.up * 0.5f) * (rb.velocity.y * rb.velocity.y)) * dragFactor, ForceMode.Acceleration); //from air resistance drag formula
+        rb.AddForce(((Vector3.up * jump.SlowFallingFactor ) * (rb.velocity.y * rb.velocity.y)) * dragFactor, ForceMode.Acceleration); //from air resistance drag formula
     }
     private void OnCollisionEnter(Collision collision)
     {
