@@ -6,11 +6,13 @@ public class MovementController : MonoBehaviour
 {
     Rigidbody rb;
     [SerializeField] LayerMask obstacleLayer; 
-    [SerializeField] float speed;
-    [SerializeField] float rotFactor;
-
+    [SerializeField] float HSpeed;
+    [SerializeField] float VSpeed;
+    [SerializeField] float rotFactor; 
     Vector3 movementVector;
     float rotDir;
+    [SerializeField] float obstacleStopDistance;
+    [SerializeField] bool stopBeforeObstacles;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +27,7 @@ public class MovementController : MonoBehaviour
         movementVector.x = Input.GetAxis("Horizontal");
         movementVector.z = Input.GetAxis("Vertical");
         rotDir = Input.GetKey(KeyCode.Q) ? -1f : Input.GetKey(KeyCode.E) ? 1f : 0;
+
     }
 
 
@@ -36,12 +39,19 @@ public class MovementController : MonoBehaviour
 
     void MovementByPhysics()
     {
-        Debug.DrawRay(transform.position + Vector3.up * 0.5f, transform.forward);
-        if (Physics.Raycast(transform.position+Vector3.up*0.5f, transform.forward, 1f, obstacleLayer))
+
+        Vector3 rayVector = (transform.forward * movementVector.normalized.z) + (transform.right * movementVector.normalized.x);
+         //if(!Jump.isGrounded)
+        //if (Physics.box(transform.position + Vector3.down * 0.48f, rayVector, obstacleStopDistance, obstacleLayer))
+        if (Physics.BoxCast(transform.position, transform.lossyScale*0.5f, rayVector,transform.rotation,obstacleStopDistance,obstacleLayer))
         {
-            Debug.Log("yes");
+            Debug.Log(rb.velocity);
+            if(stopBeforeObstacles) 
+                rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
         }
-        rb.velocity = ((((transform.right * movementVector.x) + (transform.forward * movementVector.z)) * speed * Time.fixedDeltaTime) + Vector3.up * rb.velocity.y);
+        else {  
+        rb.velocity = ((((transform.right * movementVector.x * HSpeed) + (transform.forward * movementVector.z * VSpeed)) * Time.fixedDeltaTime) + Vector3.up * rb.velocity.y);
+        }
     }
     void RotateByAngularVelocit()
     {
