@@ -77,9 +77,7 @@ public class JumpSystem : MonoBehaviour
         {
             if (Physics.Raycast(transform.position + Vector3.down * 0.48f,transform.forward,1f,groundLayer))
             {
-                Debug.Log("yes");
-
-
+                
             }
         }
     }
